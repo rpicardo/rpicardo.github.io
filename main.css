@@ -1,0 +1,114 @@
+@charset "utf-8";
+/* CSS Document */
+
+*{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-decoration: none;
+}
+
+::selection {
+	background: #fdb515;
+}
+
+.header{
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	width: 100%;
+	height: 85px;
+	display: block;
+	background-color: #101010;
+}
+
+.header-content {
+	width: 80%;
+	height: 100%;
+	display: block;
+	margin: 0 auto;
+}
+
+.logo {
+	height: 100%;
+	display: table;
+	float: left;
+}
+
+.logo h1 {
+	color: #fdb515;
+	font-family: 'FreightSans Pro Semibold';
+	display: table-cell;
+	vertical-align: middle;
+	font-size: 35px;
+}
+
+.logo h1 a {
+	color: inherit;
+	transition: 0.4s;
+}
+
+.navigation {
+	height: 100%;
+	float: right;
+}
+
+.navigation a {
+	height: 100%;
+	display: table;
+	float: left;
+	padding: 0px 20px;
+	transition: .3s;
+}
+
+.navigation a li {
+	display: table-cell;
+	vertical-align: middle;
+	color: white;
+	font-family: 'FreightSans Pro Light';
+	font-size: 16px;
+}
+
+.logo a:hover {
+	color: inherit;
+	font-weight: 1000;
+	font-size: 500%;
+	transition: .3s;
+}
+
+.navigation a:hover {
+	background: red;
+	font-weight: 1000;
+	transition: .2s;
+}
+
+@media (max-width: 550px) {
+	.header {
+		height: 95px;
+	}
+	.logo{
+		width: 0px;
+	}
+}
+
+
+/* Stuff below header */
+h1 {
+	color: orange;
+	font-family: 'FreightSans Pro Medium'
+}
+
+.main {
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-top: 2%;
+}
+
+p, pre {
+	font-family: 'Helvetica';
+}
+
+img {
+	float: left;
+	margin: 5px;
+}
