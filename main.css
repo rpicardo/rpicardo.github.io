@@ -73,8 +73,7 @@
 }
 
 a:hover {
-	font-weight: 1000;
-	font-size: 150%;
+	font-size: 500%;
 	transition: .3s;
 }
 
