@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Robert Picardo - website</title>
+	<link href="main.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="https://use.typekit.net/rnn1hex.css">
+	
+	<script type="text/x-mathjax-config">
+  		MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+	<script type="text/javascript"
+		src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	</script>
+</head>
+
+<body>
+<div class="header">
+		<div class="header-content">
+			<div class="logo">
+				<h1><a href="index.html">Robert Picardo</a></h1>
+			</div>
+			
+			<ul class="navigation">
+				<a href="index.html"><li>Home</li></a>
+				<a href="svd.html"><li>About</li></a>
+				<a href="portfolio.html"><li>Portfolio</li></a>
+			</ul>
+		</div>
+</div>
+	
+<div class="main">
+	<h1>SVD and image compression</h1>
+	<p>A useful application of linear algebra is image compression—a way of reducing the amount of information within the image, all the while preserving some of its original structure. To do this, we perform a matrix factorization method called singular value decomposition.</p>
+	<br>
+	<p>Singular value decomposition (SVD) is a way of <em>decomposing</em> a matrix $\mathbf A \in \mathcal M_{m \times n}(\mathbb R)$ into three matrices: two orthogonal matrices $\mathbf U$ and $\mathbf V$ and an almost diagonal matrix $\mathbf \Sigma = \mathrm{diag}(\sigma_1, \sigma_2, \ldots, \sigma_r)$ where $r$ is the rank of $\mathbf A$. We can show these matrices as such:
+	$$\mathbf A = \mathbf U \mathbf \Sigma \mathbf V^\intercal = 
+		\begin{bmatrix}
+			\mid &amp; \cdots &amp; \mid \\
+			\mathbf u_1 &amp; \cdots &amp; \mathbf u_m \\
+			\mid &amp; \cdots &amp; \mid
+		\end{bmatrix}
+		\begin{bmatrix}
+			\sigma_1 &amp; &amp; &amp; 0 \\
+			&amp; \ddots &amp; &amp; \vdots \\
+			&amp; &amp; \sigma_r &amp; 0 \\
+			0 &amp; \cdots &amp; 0 &amp; 0
+		\end{bmatrix}
+		\begin{bmatrix}
+			\mid &amp; \cdots &amp; \mid \\
+			\mathbf v_1 &amp; \cdots &amp; \mathbf v_n \\
+			\mid &amp; \cdots &amp; \mid
+		\end{bmatrix}^\intercal
+	$$
+	and we call $\sigma_1, \ldots, \sigma_r \in \mathbb R_{\geq 0}$ the singular values of $\mathbf A$. We find these matrices in particular by using the following algorithm: First, find an orthonormal eigenvector basis of $\mathbf A^\intercal \mathbf A$. Using the eigenvalues of $\mathbf A^\intercal \mathbf A$, take their square roots to find the singular values, which will always be nonnegative (this is because $\mathbf A^\intercal \mathbf A$ is positive semidefinite): $\sigma_k = \sqrt{\lambda_k}$ (for a $k$th eigenvalue $\lambda_k$). Then, reorder these singular values such that they are in nonincreasing order (and reorder their eigenvector basis accordingly). We assign this reordered basis as $\{ \mathbf v_1, \ldots, \mathbf v_n \}$. We determine the first $r$ columns of $\mathbf U$ by normalizing the transformed $\mathbf v_k$'s: $\mathbf u_k = \mathbf A \mathbf v_k/\sigma_k$ (for $k \in \{ 1, \ldots, r\}$). The set of vectors $\{ \mathbf u_1, \ldots, \mathbf u_r \}$ serves as an orthonormal basis for $\mathbb R^r$. To fill in the rest of our basis of $\mathbf u$'s, we find a basis for the orthogonal complement of $\mathbf A$'s column space, which is its left nullspace $\mathrm{null}(\mathbf A^\intercal)$.
+	</p>
+	<br>
+	<p>
+	One popular interpretation of the SVD method is that $\mathbf V^\intercal$, $\mathbf \Sigma$, and $\mathbf U$ describe a sequence of linear transformations: <em>rotate, scale, rotate</em>. Consider a shape, say, a ellipse that lives in $\mathbb R^2$. The first transformation $\mathbf U$ <em>rotates</em> the columns of $\mathbf V$, which we call the <em>left singular vectors of $\mathbf A$</em>, to the standard basis of $\mathbb R^2$. The diagonal matrix $\mathbf \Sigma$ <em>scales</em> $\mathbb R^2$ along its axes (which comprise the orthonormal basis). The orthogonal matrix $\mathbf U$ finally <em>rotates</em> the standard basis of $\mathbb R^2$ to another orthonormal basis, giving us the ellipse transformed through $\mathbf A$ as desired.
+	</p>
+	<br>
+		<figure class="center">
+			<video class="center" width="600" autoplay controls>
+				<source src="CreateCircle.mp4" type="video/mp4">
+				Your browser does not support HTML video.
+			</video>
+			<br>
+			<p>A simple SVD video—"rotate, stretch, rotate." First, we see the transformation of $\mathbf A$ by itself. Once we return to our original position, the $\mathbb R^2$ plane is transformed so that the basis vectors $(0.23, 0.97)$ and $(-0.97, 0.23)$ are <em>rotated</em> into standard bases $(1, 0)$ and $(0, 1)$. These bases are then <em>stretched</em> by $2.29$ and $0.87$ respectively, before being again <em>rotated</em> into the basis vectors $(0.53, 0.85)$ and $(-0.85, 0.53)$.</p>
+		</figure>
+	<br>
+	<p>If you just so happen to already know linear algebra, you can succinctly express this last paragraph with another way of stating the SVD like so:
+	$$\mathbf A = \mathbf P_{\mathcal C \leftarrow \varepsilon_n} \; \mathbf A_{\mathcal B, \mathcal C} \; \mathbf P_{\varepsilon_m \leftarrow \mathcal B}$$
+	where $\mathcal B \subset \mathbb R^m$ and $\mathcal C \subset \mathbb R^n$ are orthonormal bases and $\mathcal A_{\mathbf B, \mathbf C}$ describes a "diagonal" transformation. This, however, is not the only interpretation of this semmingly abstract concept of orthonormality and transformation; "rotate, stretch, rotate" just happens to be the popularized slogan of SVD by <a href="https://math.mit.edu/~gs/">Gilbert Strang</a>, a well-respected communicator of linear algebra. The next interpretation that we will talk about is more significant to our motivation of image compression, and it is related to the concept of <em>resolution</em> and <em>quality</em>.
+	</p>
+</div>
+</body>
+</html>
