@@ -33,8 +33,13 @@
 		</div>
 </div>
 	
-<div class="main">
-	<h1>SVD and image compression</h1>
+<article>
+	<h1>The Singular Value Decomposition and Image Compression</h1>
+	<p class="prereq"><strong>Prerequisites:</strong> Linear algebra; recommended to have learned diagonalization (eigenvectors, eigenvalues, and eigenspaces) and orthogonality (inner product spaces, orthonormalization). Experience with MATLAB or Python.</p>
+	
+	<p>Image compression is the act of reducing the amount of data contained within an image while
+	</p>
+	<br>
 	<p>A useful application of linear algebra is image compression—a way of reducing the amount of information within the image, all the while preserving some of its original structure. To do this, we perform a matrix factorization method called singular value decomposition.</p>
 	<br>
 	<p>Singular value decomposition (SVD) is a way of <em>decomposing</em> a matrix $\mathbf A \in \mathcal M_{m \times n}(\mathbb R)$ into three matrices: two orthogonal matrices $\mathbf U$ and $\mathbf V$ and an almost diagonal matrix $\mathbf \Sigma = \mathrm{diag}(\sigma_1, \sigma_2, \ldots, \sigma_r)$ where $r$ is the rank of $\mathbf A$. We can show these matrices as such:
@@ -64,18 +69,69 @@
 	</p>
 	<br>
 		<figure class="center">
-			<video class="center" width="600" autoplay controls>
-				<source src="CreateCircle.mp4" type="video/mp4">
+			<video width="80%" autoplay loop controls>
+				<source src="SVDExample.mp4" type="video/mp4">
 				Your browser does not support HTML video.
 			</video>
-			<br>
-			<p>A simple SVD video—"rotate, stretch, rotate." First, we see the transformation of $\mathbf A$ by itself. Once we return to our original position, the $\mathbb R^2$ plane is transformed so that the basis vectors $(0.23, 0.97)$ and $(-0.97, 0.23)$ are <em>rotated</em> into standard bases $(1, 0)$ and $(0, 1)$. These bases are then <em>stretched</em> by $2.29$ and $0.87$ respectively, before being again <em>rotated</em> into the basis vectors $(0.53, 0.85)$ and $(-0.85, 0.53)$.</p>
+			<figcaption>A simple SVD video—"rotate, stretch, rotate." First, we see the transformation of $\mathbf A$ by itself. Once we return to our original position, the $\mathbb R^2$ plane is transformed so that the basis vectors $(0.23, 0.97)$ and $(-0.97, 0.23)$ are <em>rotated</em> into standard bases $(1, 0)$ and $(0, 1)$. These bases are then <em>stretched</em> by $2.29$ and $0.87$ respectively, before being again <em>rotated</em> into the basis vectors $(0.53, 0.85)$ and $(-0.85, 0.53)$.</figcaption>
 		</figure>
 	<br>
-	<p>If you just so happen to already know linear algebra, you can succinctly express this last paragraph with another way of stating the SVD like so:
+	<p>If you happen to know change-of-basis matrices, you can succinctly express this last paragraph with another way of stating the SVD like so:
 	$$\mathbf A = \mathbf P_{\mathcal C \leftarrow \varepsilon_n} \; \mathbf A_{\mathcal B, \mathcal C} \; \mathbf P_{\varepsilon_m \leftarrow \mathcal B}$$
-	where $\mathcal B \subset \mathbb R^m$ and $\mathcal C \subset \mathbb R^n$ are orthonormal bases and $\mathcal A_{\mathbf B, \mathbf C}$ describes a "diagonal" transformation. This, however, is not the only interpretation of this semmingly abstract concept of orthonormality and transformation; "rotate, stretch, rotate" just happens to be the popularized slogan of SVD by <a href="https://math.mit.edu/~gs/">Gilbert Strang</a>, a well-respected communicator of linear algebra. The next interpretation that we will talk about is more significant to our motivation of image compression, and it is related to the concept of <em>resolution</em> and <em>quality</em>.
+	where $\mathcal B \subset \mathbb R^m$ and $\mathcal C \subset \mathbb R^n$ are orthonormal bases and $\mathcal A_{\mathcal B, \mathcal C}$ describes a "diagonal" transformation. This, however, is not the only interpretation of this seemingly abstract concept of orthonormality and transformation; "rotate, stretch, rotate" just happens to be the popularized slogan of SVD by <a href="https://math.mit.edu/~gs/">Gilbert Strang</a>, a well-respected communicator of linear algebra. The next interpretation that we will talk about is more significant to our motivation of image compression, and it is related to the concept of <em>resolution</em> and <em>quality</em>.
 	</p>
-</div>
+	<br>
+	<p>This second interpretation breaks down the SVD factorization as a sum of scaled <em>outer products</em>—
+		$$\begin{aligned}
+		\mathbf A	&amp;= \sum_{i=1}^r \sigma_i \mathbf u_i \mathbf v_i^\intercal = \sigma_1 \mathbf u_1 \mathbf v_1^\intercal + \cdots + \sigma_r \mathbf u_r \mathbf v_r^\intercal \\
+					&amp;= \sigma_1 \begin{bmatrix} u_{11} v_{11} &amp; \cdots &amp; u_{11} v_{n1} \\
+							\vdots &amp; \ddots &amp; \vdots \\
+							u_{m1} v_{11} &amp; \cdots &amp; u_{m1} v_{n1} \\
+					   \end{bmatrix} + \cdots + \sigma_r \begin{bmatrix} u_{1r} v_{1r} &amp; \cdots &amp; u_{1r} v_{nr} \\
+							\vdots &amp; \ddots &amp; \vdots \\
+							u_{mr} v_{1r} &amp; \cdots &amp; u_{mr} v_{nr} \\
+					   \end{bmatrix}
+		\end{aligned}
+		$$
+	—each of which spawns a new $m \times n$ matrix (with the original dimensions of $\mathbf A$). Here's the great thing about the SVD summation: each $m \times n$ matrix ($\sigma_i \mathbf u_i \mathbf v_i^\intercal$) contributes to the "quality" of the matrix, and as the index $i$ increases up to $r$, the matrix gets closer to our original matrix $\mathbf A$. The second great thing about SVD is that the singular values are arranged in a nonincreasing fashion; this means that the <em>earliest</em> singular values <em>contribute most</em> to the "structural information" about the matrix.
+	</p>
+	<br>
+	<p>We now <em>truncate</em> this summation up to rank $k \leq r$, or such that it has $k$ singular values. In other words, we cut off this summation like so:
+		$$
+		\mathbf A_k	= \sum_{i=1}^k \sigma_i \mathbf u_i \mathbf v_i^\intercal = \sigma_1 \mathbf u_1 \mathbf v_1^\intercal + \cdots + \sigma_k \mathbf u_k \mathbf v_k^\intercal
+		$$
+	Referring back to the three-matrix format of the SVD, this is equivalent to multiplying the first $k$ columns of $\mathbf U$, the upper left $k \times k$ submatrix of $\mathbf \Sigma$, and the first $k$ rows of the transpose of $\mathbf V$, which we call $\mathbf U_k$, $\mathbf \Sigma_k$, and $\mathbf V_k^\intercal$ respectively. This format describes how computers calculate matrix approximations like $\mathbf A_k$.
+	</p>
+	<div>
+		<figure class="center">
+			<img src="rank k approximation.svg" width="60%" alt="Rank k approximation"/>
+			<br>
+			<figcaption>$\mathbf A_k$, a rank $k$ approximation of the original matrix $\mathbf A$ (where $k \leq \mathrm{rank}(\mathbf A)$). It is composed of the first $k$ columns of $\mathbf U$, the upper left $k \times k$ submatrix of $\mathbf \Sigma$, and the first $k$ rows of $\mathbf V^\intercal$.</figcaption>
+		</figure>
+	</div>
+	<p>An important principle about image compression is to find the best approximation at a selected resolution (be it the number of pixels or a percentage of the original quality), so to <em>conserve as much information as possible</em>. For our purposes, the <em>rank of a matrix</em> is our notion of "resolution." Keep note that it doesn't completely correlate with resolution since the original matrix still has the same dimensions throughout the whole process, but it captures how much <em>information</em> is conserved after the fact.
+	</p>
+	<br>
+	<p>Before we bring up an extremely important theorem that shows the practicality of SVD, we quantify how <em>accurate</em> a matrix by using an extension of the "vector norm," but for matrices. An orthogonally invariant matrix norm (otherwise known as <em>unitarily invariant</em> when generalized) is a norm that <em>does not change under rotation</em>—more formally, it is a norm $||\cdot||$ such that, for all $\mathbf A \in \mathcal M_{m \times n}(\mathbb R)$, $||\mathbf U \mathbf A \mathbf V|| = ||\mathbf A||$ for any orthogonal matrices $\mathbf U \in \mathcal M_{m \times m}(\mathbb R)$ and $\mathbf V \in \mathcal M_{n \times n}(\mathbb R)$. (When the scalar field $\mathbb R$ is instead generalized to $\mathbb F$, we call $||\cdot||$ unitarily invariant for unitary $\mathbf U$ and $\mathbf V$ instead, but this is not important for our purposes.)
+	</p>
+	<br>
+	<div class="theorem">
+		<strong>Theorem</strong> (Eckart–Young–Mirsky)<strong>.</strong> Let $\mathbf A_k$ be the rank $k$ approximation of a matrix $\mathbf A \in \mathcal M_{m \times n}(\mathbb R)$ obtained through SVD. Then, we have that for all $\mathbf X \in \mathcal M_{m \times n}(\mathbb R)$ such that $\mathrm{rank} (\mathbf X) = k$, $||\mathbf A - \mathbf A_k|| \leq ||\mathbf A - \mathbf X||$, where $||\cdot||$ denotes any orthogonally invariant norm of matrices.
+	</div>
+	<br>
+	<p>
+		In less formal terms, simply taking the SVD truncated at a constrained rank $k$ gives the <em>most optimal/accurate</em> matrix that approximates the original matrix <em>at that same rank</em>. Let's see this in action.
+	</p>
+	<h2>
+		Image Compression
+	</h2>
+	<p>
+		A digital raster image is essentially a <em>three-dimensional array</em> with three layers corresponding to the RGB channels of the image. Each element of the array is an 8-bit unsigned value (which can range from 0 to 255). When the three RGB layers are "combined," each pixel of the rendered image is a 24-bit value combining the 8-bit values from each of the three layers. In Python, we convert each image into
+	</p>
+	<br>
+	<p>
+		
+	</p>
+</article>
 </body>
 </html>
