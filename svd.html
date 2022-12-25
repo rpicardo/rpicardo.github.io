@@ -2,9 +2,10 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Robert Picardo - website</title>
+	<title>Singular value decomposition and image compression</title>
 	<link href="main.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="https://use.typekit.net/rnn1hex.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/dreampulse/computer-modern-web-font@master/fonts.css">
 	
 	<script type="text/javascript" id="MathJax-script" async
 			src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
@@ -34,15 +35,16 @@
 </div>
 	
 <article>
-	<h1>The Singular Value Decomposition and Image Compression</h1>
-	<p class="prereq"><strong>Prerequisites:</strong> Linear algebra; recommended to have learned diagonalization (eigenvectors, eigenvalues, and eigenspaces) and orthogonality (inner product spaces, orthonormalization). Experience with MATLAB or Python.</p>
+	<h1>Image Compression through Singular Value Decomposition</h1>
+	<p class="prereq"><strong>Prerequisites:</strong> Linear algebra; recommended to have learned diagonalization (eigenvectors, eigenvalues, and eigenspaces) and orthogonality (inner product spaces, orthonormalization). Experience with Python.</p>
 	
-	<p>Image compression is the act of reducing the amount of data contained within an image while
+	<p>
+		Image compression is the act of reducing the amount of data contained within an image while keeping as much structure as possible.
 	</p>
 	<br>
 	<p>A useful application of linear algebra is image compression—a way of reducing the amount of information within the image, all the while preserving some of its original structure. To do this, we perform a matrix factorization method called singular value decomposition.</p>
 	<br>
-	<p>Singular value decomposition (SVD) is a way of <em>decomposing</em> a matrix $\mathbf A \in \mathcal M_{m \times n}(\mathbb R)$ into three matrices: two orthogonal matrices $\mathbf U$ and $\mathbf V$ and an almost diagonal matrix $\mathbf \Sigma = \mathrm{diag}(\sigma_1, \sigma_2, \ldots, \sigma_r)$ where $r$ is the rank of $\mathbf A$. We can show these matrices as such:
+	<p>The <strong>singular value decomposition</strong> (<strong>SVD</strong>) of a rank $r$ matrix $\mathbf A \in \mathcal M_{m \times n}(\mathbb R)$ is a way of <em>decomposing</em> a matrix into three "characteristic" parts: two orthogonal matrices $\mathbf U \in \mathcal M_{m \times m}(\mathbb R)$ and $\mathbf V \in \mathcal M_{n \times n}(\mathbb R)$, and a matrix of singular values formatted into a diagonal: $\mathbf \Sigma = \mathrm{diag}(\sigma_1, \ldots, \sigma_r, 0, \ldots, 0)$. We can show these matrices as such:
 	$$\mathbf A = \mathbf U \mathbf \Sigma \mathbf V^\intercal = 
 		\begin{bmatrix}
 			\mid &amp; \cdots &amp; \mid \\
@@ -65,20 +67,20 @@
 	</p>
 	<br>
 	<p>
-	One popular interpretation of the SVD method is that $\mathbf V^\intercal$, $\mathbf \Sigma$, and $\mathbf U$ describe a sequence of linear transformations: <em>rotate, scale, rotate</em>. Consider a shape, say, a ellipse that lives in $\mathbb R^2$. The first transformation $\mathbf U$ <em>rotates</em> the columns of $\mathbf V$, which we call the <em>left singular vectors of $\mathbf A$</em>, to the standard basis of $\mathbb R^2$. The diagonal matrix $\mathbf \Sigma$ <em>scales</em> $\mathbb R^2$ along its axes (which comprise the orthonormal basis). The orthogonal matrix $\mathbf U$ finally <em>rotates</em> the standard basis of $\mathbb R^2$ to another orthonormal basis, giving us the ellipse transformed through $\mathbf A$ as desired.
+	One popular interpretation of the SVD method is that $\mathbf V^\intercal$, $\mathbf \Sigma$, and $\mathbf U$ describe a sequence of linear transformations: <em>rotate, scale, rotate</em>. (It's best to view the video below to visualize how the vector space distorts under SVD.) Let's consider a shape, say, an ellipse that lives in $\mathbb R^2$. The first transformation $\mathbf U$ <em>rotates</em> the columns of $\mathbf V$, which we call the <em>left singular vectors of $\mathbf A$</em>, to the standard basis of $\mathbb R^2$. The diagonal matrix $\mathbf \Sigma$ <em>scales</em> $\mathbb R^2$ along its axes (which comprise the orthonormal basis). The orthogonal matrix $\mathbf U$ finally <em>rotates</em> the standard basis of $\mathbb R^2$ to another orthonormal basis, giving us the ellipse transformed through $\mathbf A$ as desired.
 	</p>
 	<br>
 		<figure class="center">
-			<video width="80%" autoplay loop controls>
+			<video width="100%" autoplay loop controls>
 				<source src="SVDExample.mp4" type="video/mp4">
 				Your browser does not support HTML video.
 			</video>
-			<figcaption>A simple SVD video—"rotate, stretch, rotate." First, we see the transformation of $\mathbf A$ by itself. Once we return to our original position, the $\mathbb R^2$ plane is transformed so that the basis vectors $(0.23, 0.97)$ and $(-0.97, 0.23)$ are <em>rotated</em> into standard bases $(1, 0)$ and $(0, 1)$. These bases are then <em>stretched</em> by $2.29$ and $0.87$ respectively, before being again <em>rotated</em> into the basis vectors $(0.53, 0.85)$ and $(-0.85, 0.53)$.</figcaption>
+			<figcaption>"Rotate, stretch, rotate." First, we see the transformation of $\mathbf A$ by itself. From our original position, the $\mathbb R^2$ plane is transformed so that the basis vectors $(0.23, 0.97)$ and $(-0.97, 0.23)$ are <em>rotated</em> into standard bases $(1, 0)$ and $(0, 1)$. These bases are then <em>stretched</em> by $2.29$ and $0.87$ respectively, before being again <em>rotated</em> into the basis vectors $(0.53, 0.85)$ and $(-0.85, 0.53)$.</figcaption>
 		</figure>
 	<br>
 	<p>If you happen to know change-of-basis matrices, you can succinctly express this last paragraph with another way of stating the SVD like so:
 	$$\mathbf A = \mathbf P_{\mathcal C \leftarrow \varepsilon_n} \; \mathbf A_{\mathcal B, \mathcal C} \; \mathbf P_{\varepsilon_m \leftarrow \mathcal B}$$
-	where $\mathcal B \subset \mathbb R^m$ and $\mathcal C \subset \mathbb R^n$ are orthonormal bases and $\mathcal A_{\mathcal B, \mathcal C}$ describes a "diagonal" transformation. This, however, is not the only interpretation of this seemingly abstract concept of orthonormality and transformation; "rotate, stretch, rotate" just happens to be the popularized slogan of SVD by <a href="https://math.mit.edu/~gs/">Gilbert Strang</a>, a well-respected communicator of linear algebra. The next interpretation that we will talk about is more significant to our motivation of image compression, and it is related to the concept of <em>resolution</em> and <em>quality</em>.
+	where $\mathcal B \subset \mathbb R^m$ and $\mathcal C \subset \mathbb R^n$ are orthonormal bases and $\mathbf A_{\mathcal B, \mathcal C}$ describes a "diagonal" transformation. This, however, is not the only interpretation of this seemingly abstract concept of orthonormality and transformation; "rotate, stretch, rotate" just happens to be a catchy, memorable slogan of SVD by <a href="https://math.mit.edu/~gs/">Gilbert Strang</a>, which is why it's worthwhile to look at this interpretation. The next interpretation that we will talk about is more significant to our motivation of image compression, and it is related to the concept of <em>resolution</em> and <em>quality</em>.
 	</p>
 	<br>
 	<p>This second interpretation breaks down the SVD factorization as a sum of scaled <em>outer products</em>—
@@ -109,10 +111,10 @@
 			<figcaption>$\mathbf A_k$, a rank $k$ approximation of the original matrix $\mathbf A$ (where $k \leq \mathrm{rank}(\mathbf A)$). It is composed of the first $k$ columns of $\mathbf U$, the upper left $k \times k$ submatrix of $\mathbf \Sigma$, and the first $k$ rows of $\mathbf V^\intercal$.</figcaption>
 		</figure>
 	</div>
-	<p>An important principle about image compression is to find the best approximation at a selected resolution (be it the number of pixels or a percentage of the original quality), so to <em>conserve as much information as possible</em>. For our purposes, the <em>rank of a matrix</em> is our notion of "resolution." Keep note that it doesn't completely correlate with resolution since the original matrix still has the same dimensions throughout the whole process, but it captures how much <em>information</em> is conserved after the fact.
+	<p>An important principle about image compression is to find the best approximation at a selected resolution (be it the number of pixels or a percentage of the original quality), so to <em>conserve as much information as possible</em>. For our purposes, the <em>rank of a matrix</em> is our notion of "resolution." Keep note that it doesn't completely correlate with resolution since the resulting matrix still has the same dimensions throughout the whole process, but, roughly speaking, it captures how much <em>information</em> is conserved after the fact.
 	</p>
 	<br>
-	<p>Before we bring up an extremely important theorem that shows the practicality of SVD, we quantify how <em>accurate</em> a matrix by using an extension of the "vector norm," but for matrices. An orthogonally invariant matrix norm (otherwise known as <em>unitarily invariant</em> when generalized) is a norm that <em>does not change under rotation</em>—more formally, it is a norm $||\cdot||$ such that, for all $\mathbf A \in \mathcal M_{m \times n}(\mathbb R)$, $||\mathbf U \mathbf A \mathbf V|| = ||\mathbf A||$ for any orthogonal matrices $\mathbf U \in \mathcal M_{m \times m}(\mathbb R)$ and $\mathbf V \in \mathcal M_{n \times n}(\mathbb R)$. (When the scalar field $\mathbb R$ is instead generalized to $\mathbb F$, we call $||\cdot||$ unitarily invariant for unitary $\mathbf U$ and $\mathbf V$ instead, but this is not important for our purposes.)
+	<p>Before we bring up an extremely important theorem that how practical SVD is, we quantify how <em>accurate</em> a matrix is to another by using an extension of the vector norm, but for matrices. An <em>orthogonally invariant</em> matrix norm is a norm that <em>does not change under rotation</em>—more formally, it is a norm $||\cdot||$ such that, for all $\mathbf A \in \mathcal M_{m \times n}(\mathbb R)$, $||\mathbf U \mathbf A \mathbf V|| = ||\mathbf A||$ for any orthogonal matrices $\mathbf U \in \mathcal M_{m \times m}(\mathbb R)$ and $\mathbf V \in \mathcal M_{n \times n}(\mathbb R)$. (When the scalar field $\mathbb R$ is generalized to any field, we instead call $||\cdot||$ <em>unitarily invariant</em> for unitary $\mathbf U$ and $\mathbf V$, but this is not important for our purposes.)
 	</p>
 	<br>
 	<div class="theorem">
@@ -120,18 +122,210 @@
 	</div>
 	<br>
 	<p>
-		In less formal terms, simply taking the SVD truncated at a constrained rank $k$ gives the <em>most optimal/accurate</em> matrix that approximates the original matrix <em>at that same rank</em>. Let's see this in action.
+		In less formal terms, simply taking the SVD truncated at a constrained rank $k$ gives the <em>most optimal/accurate</em> matrix that approximates the original matrix <em>at that same rank</em>. We won't prove this theorem here for conciseness' sake, but feel free to read up on <a href="https://academic.oup.com/qjmath/article/11/1/50/1525786">L. Mirsky's paper on the subject</a>. Let's see this in action.
 	</p>
 	<h2>
 		Image Compression
 	</h2>
 	<p>
-		A digital raster image is essentially a <em>three-dimensional array</em> with three layers corresponding to the RGB channels of the image. Each element of the array is an 8-bit unsigned value (which can range from 0 to 255). When the three RGB layers are "combined," each pixel of the rendered image is a 24-bit value combining the 8-bit values from each of the three layers. In Python, we convert each image into
+		A digital raster image is essentially a <em>three-dimensional array</em> (say, $\mathbf X$) with three layers corresponding to the RGB channels of the image. Each element of the array is an 8-bit unsigned value (which can range from 0 to 255). When the three RGB layers are "combined," each pixel of the rendered image is a 24-bit value combining the 8-bit values from each of the three layers; we can view each pixel as an ordered triplet $(r, g, b)$ where $r = \mathbf X[i,j,0]$, $g = \mathbf X[i,j,1]$, and $b = \mathbf X[i,j,2]$.
+	</p>
+	<figure class="center">
+		<video width="100%" autoplay loop controls>
+			<source src="ImageChannels.mp4" type="video/mp4">
+			Your browser does not support HTML video.
+		</video>
+		<figcaption>An image is a three-dimensional array comprised of three red, green, and blue channels.
+		</figcaption>
+	</figure>
+	<p>
+		Next, we perform the image compression on each RGB channel, so that these channels are merged back together to produce the overall compressed image. Note that when these channels are isolated by themselves (i.e. not embedded in a three-dimensional array), they are <em>grayscale</em> bitmaps which measure the level of color pertaining to that channel.
 	</p>
 	<br>
 	<p>
-		
+		In Python, an image is converted into an array by importing the <code>numpy</code> (as <code>np</code>) and <code>imageio</code> modules. The image is read by the <code>imageio.imread()</code> function, after which the data is converted to an array by the <code>np.asarray()</code> function. A basic showcase of the RGB channels can be coded here:
 	</p>
+		<pre>
+import numpy as np
+import imageio.v2 as imageio
+
+img = imageio.imread(r"\Downloads\tiger.jpeg")
+X_img = np.asarray(img)
+
+rgb = [np.zeros(X_img.shape) for k in range(3)]
+rgb[0][:,:,0], rgb[1][:,:,1], rgb[2][:,:,2] = [X_img[:,:,i] for i in range(3)]
+
+imageio.imwrite('X_red.jpg', np.uint8(rgb[0]))
+imageio.imwrite('X_green.jpg', np.uint8(rgb[1]))
+imageio.imwrite('X_blue.jpg', np.uint8(rgb[2]))
+		</pre>
+	<p>
+		Here, $\mathbf X_\text{img}$ is the array associated with <code>tiger.jpeg</code>. A list $\boldsymbol{rgb}$ is constructed such that it contains three arrays representing red, green, and blue respectively; they are first instantiated as zero three-dimensional arrays. Then, for $i \in \{ 0, 1, 2 \}$, the $i$th layer in the $i$th three-dimensional array is assigned the $i$th layer of $\mathbf X_\text{img}$.
+	</p>
+	<br>
+	<p>
+		What results is that the $\boldsymbol{rgb}$ list contains three arrays with all layers zero <em>except</em> for the red/green/blue channel itself, depending on the position of the array within $\boldsymbol{rgb}$. As a result, when we display the image using <code>imageio.imwrite()</code>, it will display that layer with the right color instead of grayscale by default.
+	</p>
+	<br>
+	<p>
+		Now we can start the singular value decomposition process. The <code>np.linalg.svd()</code> function performs singular value decomposition on $\mathbf X$, giving three outputs: $\mathbf U$, $\mathbf V$, and a vector of singular values $\mathbf S \in \mathbb R^{\mathrm{rank}(\mathbf A)}$, which we will revert back to a diagonal matrix $\mathbf S \leftarrow \mathrm{diag} (\mathbf S)$ ($\mathbf S$ is a vector for optimal computation purposes; a computer doesn't care about the stray zeros that come with it).
+	</p>
+	<br>
+	<p>
+		We truncate the SVD to rank $r$ by taking the first $r$ columns of $\mathbf U$, the upper-left $r \times r$ submatrix of $\mathbf S$, and the first $r$ rows of $\mathbf V^\intercal$:
+		$$\boldsymbol{rgb}[i] = \mathbf U[:,:\!r] \; \mathbf S[:r,:\!r] \; \mathbf V^\intercal[:\!r,:]$$
+		and we repeat this for each RGB channel ($i \in \{ 0, 1, 2 \}$). The next step is to <em>"glue" back</em> the compressed RGB layers to form a new image; let's use the command <code>np.dstack()</code>, which concatenates input 2D arrays of the same shape <em>along the third axis</em>. Finally, to see the output, we plot the image onto a figure window using <code>plt.imshow</code> (from the module <code>matplotlib.pyplot</code> imported as <code>plt</code>).
+	</p>
+  <pre>import numpy as np
+import imageio.v2 as imageio
+import matplotlib.pyplot as plt
+
+img = imageio.imread(r"C:\Users\rpica\Downloads\tiger.jpeg")
+X_img = np.asarray(img)
+
+for r in range(10):
+    rgb = [X_img[:,:,i] for i in range(3)]
+
+    for i in range(3):
+        U, S, Vt = np.linalg.svd(rgb[i])
+        S = np.diag(S)
+        rgb[i]= U[:,:r] @ S[:r,:r] @ Vt[:r,:]
+    
+    X_comp = np.dstack([rgb[i] for i in range(3)])
+    
+    plt.imshow(np.uint8(X_comp))
+    plt.axis('off')
+    plt.show()</pre>
+	<figure class="center">
+		  <div class="tigersvdslideshow">
+			<img src="tiger rank 1.jpg" height="350px" alt="tiger.jpeg, $r = 1$"/>
+			<img src="tiger rank 2.jpg" height="350px" alt="tiger.jpeg, $r = 2$"/>
+			<img src="tiger rank 3.jpg" height="350px" alt="tiger.jpeg, $r = 3$"/>
+			<img src="tiger rank 4.jpg" height="350px" alt="tiger.jpeg, $r = 4$"/>
+			<img src="tiger rank 5.jpg" height="350px" alt="tiger.jpeg, $r = 5$"/>
+			<img src="tiger rank 6.jpg" height="350px" alt="tiger.jpeg, $r = 6$"/>
+			<img src="tiger rank 7.jpg" height="350px" alt="tiger.jpeg, $r = 7$"/>
+			<img src="tiger rank 8.jpg" height="350px" alt="tiger.jpeg, $r = 8$"/>
+			<img src="tiger rank 9.jpg" height="350px" alt="tiger.jpeg, $r = 9$"/>
+		  </div>
+		  <br>
+		  <figcaption>Rank $r$ approximations for <code>tiger.jpeg</code>, where $r \in \{ 1, \ldots, 9 \}$, as outputted from the code above. <em>Scroll to see different rank approximations.</em></figcaption>
+	</figure>
+	<br>
+	<p>
+	  We repeat this for the first 100 low-rank approximations, which are displayed below in a video sequence (each image shown for a duration of 0.1 seconds). Note that SVD-truncations made in Python have "artifacts" that wouldn't normally be there; programs more tailored for image processing (such as MATLAB) are much more efficient to carry out this process, without such artifacts.
+	</p>
+	<br>
+	<figure class="center">
+		<video width="90%" autoplay loop controls>
+			<source src="SVDOuterProduct.mp4" type="video/mp4">
+			Your browser does not support HTML video.
+		</video>
+		<figcaption>
+			The first 100 low-rank approximations ($r \in \{ 0, \ldots, 99 \}$), as outputted by the Python/Manim code below.
+		</figcaption>
+	</figure>
+	<h2>
+		Optimal image compression through SVD
+	</h2>
+	<p>
+		As you can see, low-rank image compressions do not look as "beautiful" as the original image. So, a new problem arises: how do we balance between reducing data and preserving the accuracy of depiction? If we graph the singular values of the red channel $\mathbf X_\text{red}$, we get a nonincreasing graph (as expected):
+	</p>
+	<br>
+	<figure class="center">
+			<video width="90%" autoplay loop controls>
+			<source src="SingValGraph.mp4" type="video/mp4">
+			Your browser does not support HTML video.
+		</video>
+		<figcaption>
+			A graph of the $r$th singular value extracted from square-rooting the eigenvalues of $\mathbf A^\intercal \mathbf A$ and reordering them in nonincreasing fashion.
+		</figcaption>
+	</figure>
+	<br>
+	<p>
+		You might intuitively truncate the SVD right after the singular values <em>decrease the most</em> (at which we would refer to as a large gap or "elbow"). This is because we aim to catch most of the preserved information within the earlier (and larger) singular values, and discard the singular values that don't contribute significantly to our compressed image (all they would do is add in the little details and anti-alias the image). Of course, this is a very "eyeball" method of estimating the optimal threshold (let it be denoted $\tau_*$), and throughout literature people have devised more accurate methods of finding a "great" truncation method (see <a href="http://projecteuclid.org/euclid.aoas/1245676186">Owen <em>et al.</em> (2009)</a> and <a href="
+http://www.tandfonline.com/doi/pdf/10.1080/00401706.1978.10489693">Wold (1978)</a>, for example).
+	</p>
+	<br>
+	<p>
+		Recall that the SVD of a matrix $\mathbf A \in \mathcal M_{m \times n}(\mathbb R)$ can be expressed as the sum of rank-one matrices generated by orthonormal bases $\{ \mathbf u_1, \ldots, \mathbf u_m \} \subset \mathbb R^m$ and $\{ \mathbf v_1, \ldots, \mathbf v_n \} \subset \mathbb R^n$:
+		$$\mathbf A = \sum_{k=1}^{\mathrm{rank}(\mathbf A)} \sigma_k \mathbf u_k \mathbf v_k^\intercal$$
+		where $\{ \sigma_1, \ldots, \sigma_{\mathrm{rank} (\mathbf A)} \}$ are the singular values of $\mathbf A$ listed in nonincreasing order. One of the best optimal threshold methods stems from the paper <a href="https://arxiv.org/abs/1305.5870">"The optimal hard threshold for singular values is $4/\sqrt 3$"</a> by Gavish and Donoho (2014). It devises an optimal <em>singular value hard threshold</em> for a matrix with a known noise level $\gamma$. (We deviate from the notation used in Gavish–Donoho, so as to avoid confusion with the notation used prior.)
+	</p>
+	<br>
+	<p>
+		More precisely, the matrix is <em>low-rank</em> and is of the form $\mathbf X = \mathbf X_\text{true} + \gamma \mathbf X_\text{noise}$, where $\mathbf X_\text{true}$ can be thought of as our <em>original signal data</em> and $\mathbf X_\text{noise}$ is our way of "sprinkling some white noise in." To be even more precise, the entries of $\mathbf X_\text{noise}$ are assumed to be <a href="https://deepai.org/machine-learning-glossary-and-terms/independent-and-identically-distributed-random-variables">independent, identically distributed</a>, and with orthogonally invariant distribution (i.e. $\mathbf U \mathbf X_\text{noise} \mathbf V$'s entries have the same distribution as $\mathbf X_\text{noise}$ for orthogonal $\mathbf U$ and $\mathbf V$). If $\mathbf X$ is <em>square</em> ($n \times n$), the optimal singular value hard threshold is $\tau_* = (4/\sqrt 3) \; \sqrt n \gamma$—hence the title of the Gavish–Donoho paper. The $\tau^*$ formula for any $m \times n$ matrix is more complex, and we won't display it here (but feel free to read the paper if you like!)
+	</p>
+	<br>
+	<p>
+		99% of the time, we <em>will not know the amount of noise $\gamma$</em> sprinkled onto a particular image, nor will our image fit the conditions listed in the above example. In this case, the Gavish–Donoho paper instead defines the optimal hard threshold to be
+		$$\hat{\tau}_*(\beta, \mathbf X) = \omega(\beta) \, \sigma_\text{med}$$
+		where $\mathbf X \in \mathcal M_{m \times n}(\mathbb R)$, $\beta = m/n$ is the ratio of the matrix's shape, and $\sigma_\text{med}$ is the median singular value. The value of $\omega(\beta)$ cannot be evaluated analytically but either can be <a href="https://purl.stanford.edu/vg705qn9070">computed algorithmically</a> or approximated through
+		$$\omega(\beta) \approx 0.56 \beta^3 - 0.95 \beta^2 + 1.82 \beta + 1.43$$
+		with a tolerance of $\pm 0.02$. Note that for both options of calculating $\omega(\beta)$, the value of $\beta$ must be less than or equal to 1 so $\matrix X$ must be transposed beforehand if the image is taller than it is wide.
+	</p>
+	<br>
+	<p>
+		This threshold $\hat{\tau}_*(\beta, \mathbf X)$ is defined such that all singular values of $\mathbf X$ less than it are made zero for an optimal SVD truncation. These singular values that are cut off will add more noise to the signal matrix than necessary. The Gavish–Donoho threshold can be more precisely described as the <em>asymptotically optimal</em> singular value hard threshold; in other words, it is the closest approximation to the signal matrix $\mathbf X_\text{true}$ in terms of the <em>asymptotic mean square error</em>:
+	</p>
+	<br>
+	<div class="theorem">
+		<strong>Definition.</strong> We have a denoising problem $\mathbf X_n = \mathbf X_\text{$n$, true} + \frac{1}{\sqrt n} \mathbf X_\text{$n$, noise}$, where $\mathbf X_n$ has singular value decomposition $\mathbf X_n = \mathbf U_n \; \mathrm{diag}(\mathbf x, 0, \ldots, 0) \mathbf \; V_n^\intercal$ (and therefore $\mathbf x$ is the row vector of $\mathbf X_n$'s singular values). The <strong>asymptotic mean square error</strong> is defined as the almost sure limit
+		$$\mathbf M(\hat{\mathbf X}_n, \mathbf x) = \lim_{n \to \infty} \left| \left| \hat{\mathbf X}_n - \mathbf X_\text{$n$, true} \right| \right|^2_F$$
+	</div>
+	<br>
+	<p>
+		The norm $||\cdot||_F$ in this case refers to the Frobenius norm—the square root of all entries of $\cdot$ squared and summed together (or equivalently, $||\mathbf A||_F = \mathrm{tr}(\mathbf A^\intercal \mathbf A)$). (The Frobenius norm is an example of a unitarily invariant matrix norm, which was mentioned earlier).
+	</p>
+	<h2>
+		SVD in the open world
+	</h2>
+	<p>
+		Regardless of its optimal approximation to the original matrix (guaranteed by the Eckart–Young–Mirsky theorem), the SVD truncation method can have some downfalls in terms of our aim to optimally compress an image. This can stem from our assumptions under which we carry image compression through, but nevertheless, SVD can serve as a great starting point for making data wonderfully easy to generalize and control.
+	</p>
+	<br>
+	<p>
+		<em>For sufficiently small ranks, the SVD truncation does not look accurate to the human eye.</em> Before we introduced an application of SVD to image compression, we made the unsound assumption that rank = resolution. Remember that the rank of a matrix is the dimension of its column space and therefore the number of <em>linearly independent</em> columns within the matrix. If we restrict the matrix to an extremely low-rank, then the structure from the original image is <em>lost</em>, in which there are guaranteed to be several columns that happen to be linear combinations of others. See, for example, the $r = 1$ approximation of <code>tiger.jpeg</code>, whose columns look <em>somewhat</em> all the same (i.e. they are all a scalar multiple of each other if we look at a specific RGB channel).
+	</p>
+	<br>
+	<figure class="center">
+		<img src="tiger rank 1.jpg" width="70%" alt="tiger.jpeg, $r = 1$"/>
+		<figcaption>The columns of a rank-one matrix are a scalar multiple of each other.</figcaption>
+	</figure>
+	<br>
+	<p>
+		Finding the closest constrained-rank approximation in terms of any unitarily invariant matrix norm relies merely on a measurement of <em>signal fidelity</em> and does not account for how viewers <em>visually perceive</em> an image's quality. According to <a href="http://www.math.chalmers.se/~mohammad/Mystudents/thesis_complete2_3.pdf">Chen and Duan (2009)</a> [CD09], the mean squared error of SVD is much higher than those of other compression techniques, such as the <a href="https://en.wikipedia.org/wiki/Discrete_cosine_transform">discrete cosine transform</a> (the most commonly used form for lossy image compression) and the <a href="https://en.wikipedia.org/wiki/Wavelet_transform">wavelet transform</a>. However, unlike these techniques whose maximal compression degree stops at a certain point, SVD has full flexibility in compressing the image to as low of a rank as possible [CD09].
+	</p>
+	<br>
+	<p>
+		While SVD may not be the best or necessarily most efficient way to compress, it does provide an introduction to <em>other aspects of data science</em>. The most common statistical application of SVD is the <strong>principal component analysis</strong> (<strong>PCA</strong>), which is a method used to analyze data measured on several parameters. Imagine you have 50 countries measured on three variables—gross domestic product (GDP), happiness, and social mobility—and list all of these out on a data table. If we reimagine this data table as a data matrix $\mathbf X$:
+		$$\mathbf X = \begin{bmatrix} \mathbf x_1 \\ \vdots \\ \mathbf x_m \end{bmatrix}$$
+		and standardize this dataset by shifting the mean to the origin, i.e. define a mean matrix as
+		$$\mathbf B = \mathbf X - \bar{\mathbf{X}} = \begin{bmatrix} \mathbf x_1 \\ \vdots \\ \mathbf x_n \end{bmatrix} - \begin{bmatrix} \bar{\mathbf{x}} \\ \vdots \\ \bar{\mathbf{x}} \end{bmatrix}$$
+		where $\bar{\mathbf x} = \left[ \sum x_{1j}/m, \sum x_{2j}/m, \ldots, \sum x_{nj}/m \right]$. What PCA analysis does, intuitively speaking, is to <em>fit a hyperellipsoid onto a data set</em> using a selected orthonormal basis of $\mathbb R^m$. If the singular value decomposition of the normalized matrix is $\mathbf B = \mathbf U \mathbf \Sigma \mathbf V^\intercal$, then $\mathbf U \mathbf \Sigma$ <em>rotates</em> the data set in terms of a standard basis, and $\mathbf V$ contains the axes of the hyperellipsoid on which to score the datapoints.
+	</p>
+	<br>
+	<p>
+		Overall, singular value decomposition may be mediocre compared to other techniques in image compression, but it does a damn good job at providing <em>characteristic</em> information of a matrix. You can look at <a href="http://timbaumann.info/svd-image-compression-demo/">Tim Baumann's interactive website</a> to play with SVD image compression and see the singular values for any image yourself.
+	</p>
+	<br>
+	<br>
+	<br>
+	<h2>References</h2>
+	<ul>
+		<li>L. Mirsky. Symmetric gauge functions and unitarily invariant norms. <em>The Quarterly Journal of Mathematics</em>, 11(1):50–59, Jan. 1960.</li>
+		<li>Art B. Owen and Patrick O. Perry. Bi-cross-validation of the SVD and the nonnegative matrix factorization. <em>The Annals of Applied Statistics</em>, 3(2):564 – 594, 2009.</li>
+		<li>Svante Wold. Cross-validatory estimation of the number of components in factor and principal components models. <em>Technometrics</em>, 20(4):397–405, 1978.</li>
+		<li>Matan Gavish and David L. Donoho. The optimal hard threshold for singular values is $4/\sqrt 3$. <em>IEEE Transactions on Information Theory</em>, 60(8):5040–5053, Aug 2014.</li>
+		<li>Wenjing Chen and Wei Duan. Computational aspects of mathematical models in image compression. <em>Chalmers University of Technology</em>, 2009.</li>
+	</ul>
 </article>
+	<div class="header">
+		<ul class="navigation">
+				<a href="index.html"><li>Home</li></a>
+				<a href="svd.html"><li>About</li></a>
+				<a href="portfolio.html"><li>Portfolio</li></a>
+			</ul>
+	</div>
 </body>
 </html>

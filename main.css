@@ -1,24 +1,4 @@
 @charset "utf-8";
-@font-face {
-    font-family: "Computer Modern";
-    src: url('http://spratt.github.io/Computer-Modern/cmunss.otf');
-  }
-  @font-face {
-    font-family: "Computer Modern";
-    src: url('http://spratt.github.io/Computer-Modern/cmunsx.otf');
-    font-weight: bold;
-  }
-  @font-face {
-    font-family: "Computer Modern";
-    src: url('http://spratt.github.io/Computer-Modern/cmunsi.otf');
-    font-style: italic, oblique;
-  }
-  @font-face {
-    font-family: "Computer Modern";
-    src: url('http://spratt.github.io/Computer-Modern/cmunbxo.otf');
-    font-weight: bold;
-    font-style: italic, oblique;
-  }
 
 /* CSS Document */
 
@@ -32,6 +12,52 @@
 ::selection {
 	background: #BC8201;
 }
+
+/* Links */
+
+a {
+	transition: .5s;
+}
+
+a:hover {
+	font-size: 120%;
+	color: #ffe19e;
+	
+	text-shadow: 0px 0px 2px #ffe19e;
+}
+
+a:link {
+	color: #fdb515;
+}
+
+a:visited {
+	color: #fdb515;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 1em;
+	background: inherit;
+	transition: background 1s;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4E4E4E;
+    border-radius: 10px;
+	border: 6px solid transparent;
+	background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background: #ababab;
+	background-clip: content-box;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Header */
 
 .header {
 /*
@@ -90,22 +116,14 @@
 	display: table-cell;
 	vertical-align: middle;
 	color: white;
+	
 	font-family: freight-sans-pro, sans-serif;
 	font-style: normal;
 	font-size: 16px;
 }
 
-a:hover {
-	font-size: 500%;
-	transition: .3s;
-}
-
-a {
-	transition: .3s;
-}
-
 .navigation a:hover {
-	background: red;
+	background: #BC8201;
 	font-weight: 1000;
 	transition: .2s;
 }
@@ -116,6 +134,7 @@ h1 {
 	font-family: freight-sans-pro, sans-serif;
 	font-weight: bolder;
 	font-size: 40px;
+	
 	font-style: normal;
 	padding-bottom: 0.1em;
 }
@@ -126,9 +145,9 @@ h1 {
 	margin-top: 2%;
 }
 
-body, p, pre {
-	font-family: "Computer Modern", serif;
-	font-size: 20px;
+body, p {
+	font-family: helvetica, serif;
+	font-size: 22px;
 	background-color: #2E2E2E;
 	color: #E0E0E0;
 }
@@ -168,15 +187,15 @@ img {
 	width: 80%;
 }
 
-figcaption {
-	font-size: 80%;
-}
-
 article {
-	padding: 10%;
+	margin-top: 10em;
+	margin-left: auto;
+	margin-right: auto;
+	width: 40em;
 }
 
 article h1 {
+	font-family: Computer Modern Sans, sans-serif;
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
@@ -190,10 +209,15 @@ article h2 {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-	text-align: center;
+	font-family: Computer Modern Sans, sans-serif;
+	color: #fdb515;
 	
 	padding-top: 0.7em;
 	padding-bottom: 0.7em;
+}
+
+article p {
+	font-family: Computer Modern Serif, serif;
 }
 
 .prereq {
@@ -203,11 +227,47 @@ article h2 {
 }
 
 figure {
-	padding-top: 1em;
-	padding-bottom: 1em;
+	padding: 1em;
+	width: 100%;
+	margin: 5px;
+	background-color: #161616;
+}
+
+figcaption {
+	font-family: Computer Modern Sans, sans-serif;
+	font-size: 90%;
+}
+
+article pre {
+	font-size: 70%;
+	
+	padding: 1em;
+	width: 100%;
+	margin: 5px;
+	background-color: #161616;
+	
+	overflow-x: auto;
+	white-space: pre-wrap;
+	white-space: -moz-pre-wrap;
+	white-space: -pre-wrap;
+	white-space: -o-pre-wrap;
+	word-wrap: break-word;
+}
+
+
+article code {
+	font-size: 90%;
+}
+
+article ul {
+	font-family: Computer Modern Serif, serif;
+	padding-left: 3em;
+    text-indent: -3em;
+	padding-bottom: 3em;
 }
 
 .theorem {
+	font-family: Computer Modern Sans, sans-serif;
 	background-color: #252525;
 	width: auto;
 	border: 1px solid white;
@@ -215,15 +275,34 @@ figure {
 	margin: 5px;
 }
 
-@media (max-width: 850px) {
+.tigersvdslideshow {
+	height: 350px;
+	overflow-y: scroll;
+	padding-right: 17px;
+	box-sizing: content-box;
+	
+	scroll-snap-type: y mandatory;
+	display: grid;
+	place-items: center;
+}
+
+.tigersvdslideshow::-webkit-scrollbar{
+    display: none;
+  }
+
+.tigersvdslideshow img {
+	scroll-snap-align: center;
+	scroll-snap-stop: always;
+}
+
+@media (max-width: 1050px) {
 	.header {
 		height: 95px;
 	}
-	.logo{
-		width: 0px;
-	}
 	article {
-		padding: 5%;
+		margin-left: 10%;
+		margin-right: 10%;
+		width: auto;
 	}
 	
 }
